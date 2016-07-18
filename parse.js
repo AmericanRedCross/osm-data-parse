@@ -1,4 +1,5 @@
 var fs = require('fs');
+var path = require('path');
 var flow = require('flow');
 var request = require('request');
 var converter = require('json-2-csv');
@@ -107,7 +108,9 @@ var parseTasks = flow.define(
     throttleTasks(this);
   },
   function(){
-    fs.writeFile("./output/output_" + timestamp + ".geojson", JSON.stringify(tasksFc));
+    // var fileName = "output_" + timestamp + ".geojson";
+    var filePath = path.join(__dirname,"output", "output_" + timestamp + ".geojson");
+    fs.writeFile(filePath, JSON.stringify(tasksFc));
   }
 );
 
@@ -122,7 +125,9 @@ var parseProjects = flow.define(
    }
     }
     converter.json2csv(missingmaps, function(err, csv){
-      fs.writeFile("./output/output_" + timestamp + ".csv", csv);
+      // var fileName = "output_" + timestamp + ".csv";
+      var filePath = path.join(__dirname,"output", "output_" + timestamp + ".csv");
+      fs.writeFile(filePath, csv);
       parseTasks();
     }, options);
   }
