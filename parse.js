@@ -12,7 +12,7 @@ var projectList = [];
 var tasksFc = { type: 'FeatureCollection', features: [] };
 
 var throttleProjects = function(cb){
-  var targetCount = 2000;
+  var targetCount = 2500;
   var counter = 0;
   for (var i=0;i<targetCount;i++) {
      (function(ind) {

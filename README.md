@@ -8,4 +8,5 @@ Currently setup for our specific use-case. But I plan to make it more configurab
 
 - download or clone the project
 - run `npm install` in the folder
+- update the line `var targetCount = 2500;` to a number greater than the most recent project
 - run `node parse.js`
