@@ -1,0 +1,18 @@
+{
+  "name": "tasking-mgr-projects",
+  "version": "0.0.0",
+  "description": "",
+  "main": "parse.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "danbjoseph",
+  "license": "",
+  "dependencies": {
+    "flow": "^0.2.3",
+    "json-2-csv": "^2.0.22",
+    "moment": "^2.13.0",
+    "request": "^2.72.0",
+    "turf": "^3.0.11"
+  }
+}

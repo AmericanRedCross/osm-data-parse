@@ -1,4 +1,2 @@
-node_modules
+notes/*
 .DS_Store
-output/*
-!output/output.txt
