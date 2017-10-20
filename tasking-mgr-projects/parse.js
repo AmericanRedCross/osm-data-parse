@@ -31,7 +31,7 @@ var throttleProjects = function(cb){
 var fetchProjectData = function(projectNumber, cb) {
   request({
     method: 'GET',
-    uri: "http://tasks.hotosm.org/project/" + projectNumber + ".json"
+    uri: "http://tasks.hotosm.org/api/v1/project/" + projectNumber + ".json"
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var jsonResponse = JSON.parse(body);
@@ -82,10 +82,10 @@ var throttleTasks = function(cb){
 
 var fetchTaskData = function(prjIndex, cb) {
   var thisPrj = missingmaps[prjIndex];
-  console.log("http://tasks.hotosm.org/project/" + thisPrj["task_number"] + "/tasks.json")
+  console.log("http://tasks.hotosm.org/api/v1/project/" + thisPrj["task_number"] + "/tasks.json")
   request({
     method: 'GET',
-    uri: "http://tasks.hotosm.org/project/" + thisPrj["task_number"] + "/tasks.json"
+    uri: "http://tasks.hotosm.org/api/v1/project/" + thisPrj["task_number"] + "/tasks.json"
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var jsonResponse = JSON.parse(body);
@@ -94,11 +94,11 @@ var fetchTaskData = function(prjIndex, cb) {
         var thisState = tile.properties.state;
         // 2 is done and 3 is validated
         // https://github.com/hotosm/osm-tasking-manager2/wiki/API#list-of-tasks-with-state-and-lock-status
-        if(thisState === 2 || thisState === 3) {
+        if(taskStatus === Mapped || taskStatus === Validated) {
           var tileProp = {
             "task": thisPrj["task_number"],
             "created": thisPrj["created"],
-            "state": thisState
+            "state": taskStatus
           };
           tasksFc.features.push(turf.feature(tile.geometry, tileProp));
         }
