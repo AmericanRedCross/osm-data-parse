@@ -31,7 +31,7 @@ var throttleProjects = function(cb){
 var fetchProjectData = function(projectNumber, cb) {
   request({
     method: 'GET',
-    uri: "http://tasks.hotosm.org/api/v1/project/" + projectNumber + ".json"
+    uri: "http://tasks.hotosm.org/api/v1/project/" + projectNumber
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var jsonResponse = JSON.parse(body);
@@ -82,10 +82,10 @@ var throttleTasks = function(cb){
 
 var fetchTaskData = function(prjIndex, cb) {
   var thisPrj = missingmaps[prjIndex];
-  console.log("http://tasks.hotosm.org/api/v1/project/" + thisPrj["task_number"] + "/tasks.json")
+  console.log("http://tasks.hotosm.org/api/v1/project/" + thisPrj["task_number"])
   request({
     method: 'GET',
-    uri: "http://tasks.hotosm.org/api/v1/project/" + thisPrj["task_number"] + "/tasks.json"
+    uri: "http://tasks.hotosm.org/api/v1/project/" + thisPrj["task_number"]
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var jsonResponse = JSON.parse(body);
