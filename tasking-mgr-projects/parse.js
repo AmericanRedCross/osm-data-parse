@@ -81,25 +81,24 @@ var throttleTasks = function(cb){
 
 var fetchTaskData = function(prjIndex, cb) {
   var thisPrj = missingmaps[prjIndex];
-  console.log("http://tasks.hotosm.org/api/v1/project/" + thisPrj["task_number"])
+  console.log("https://tasks.hotosm.org/api/v1/project/" + thisPrj["task_number"])
   request({
     method: 'GET',
-    uri: "http://tasks.hotosm.org/api/v1/project/" + thisPrj["task_number"]
+    uri: "https://tasks.hotosm.org/api/v1/project/" + thisPrj["task_number"]
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var jsonResponse = JSON.parse(body);
-      for(var i=0; i<jsonResponse.features.length; i++){
-        var tile = jsonResponse.features[i];
-        var thisState = tile.properties.state;
-        // 2 is done and 3 is validated
-        // https://github.com/hotosm/osm-tasking-manager2/wiki/API#list-of-tasks-with-state-and-lock-status
+      for(var i=0; i<jsonResponse.length; i++){
+        var tile = jsonResponse[i];
+        var thisState = tasks.features;
+        // Mapped is done and Validated is validated
+        // https://tasks.hotosm.org/api-docs/swagger-ui/index.html?url=https://tasks.hotosm.org/api/docs#/
         if(taskStatus === Mapped || taskStatus === Validated) {
           var tileProp = {
-            "task": thisPrj["task_number"],
-            "created": thisPrj["created"],
+            "task": thisTask["properties.taskId"],
             "state": taskStatus
           };
-          tasksFc.features.push(turf.feature(tile.geometry, tileProp));
+          tasksFc.features.push(turf.feature(geometry, tileProp));
         }
 
       }
