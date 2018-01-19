@@ -12,18 +12,23 @@ var missingmaps = [];
 // var projectList = [];
 var tasksFc = { type: 'FeatureCollection', features: [] };
 
+var startProject = 700;
+var maxProject = 704;
+
 var throttleProjects = function(cb){
-  var targetCount = 4000;
+  var targetCount = maxProject - startProject;
   var counter = 0;
-  for (var i=0;i<targetCount;i++) {
+  for (var i=startProject;i<maxProject+1;i++) {
      (function(ind) {
+        // # # # delay in milliseconds, should result in ~2 second spacing between calls
+        var timeoutTime = (2000 * (ind - startProject)); 
          setTimeout(function(){
            // # # # throttle process to limit the speed of calls to download files from the server
            fetchProjectData(ind, function(){
              counter ++;
              if(counter === targetCount){ cb(); }
            })
-         }, 500 + (100 * ind));
+         }, timeoutTime);
      })(i);
   }
 }
