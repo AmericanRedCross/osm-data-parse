@@ -10,17 +10,18 @@ var moment = require("moment");
 var timestamp = moment().format('YYYYMMDD-HHmmss');
 var missingmaps = [];
 // var projectList = [];
-var tasksFc = { type: 'FeatureCollection', features: [] };
+// # # # output with all mapped or validate project tiles
+var summaryFc = { type: 'FeatureCollection', features: [] };
 
-var startProject = 700;
-var maxProject = 704;
+var startProject = 718;
+var maxProject = 730;
 
 var throttleProjects = function(cb){
   var targetCount = maxProject - startProject;
   var counter = 0;
   for (var i=startProject;i<maxProject+1;i++) {
      (function(ind) {
-        // # # # delay in milliseconds, should result in ~2 second spacing between calls
+        // # # # delay in milliseconds, should result in 2 second spacing between calls
         var timeoutTime = (2000 * (ind - startProject)); 
          setTimeout(function(){
            // # # # throttle process to limit the speed of calls to download files from the server
@@ -86,24 +87,26 @@ var throttleTasks = function(cb){
 
 var fetchTaskData = function(prjIndex, cb) {
   var thisPrj = missingmaps[prjIndex];
-  console.log("https://tasks.hotosm.org/api/v1/project/" + thisPrj["task_number"])
+  console.log("https://tasks.hotosm.org/api/v1/project/" + thisPrj["task_number"]);
+  // https://tasks.hotosm.org/api-docs/swagger-ui/index.html?url=https://tasks.hotosm.org/api/docs#/
   request({
     method: 'GET',
     uri: "https://tasks.hotosm.org/api/v1/project/" + thisPrj["task_number"]
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var jsonResponse = JSON.parse(body);
-      for(var i=0; i<jsonResponse.length; i++){
-        var tile = jsonResponse[i];
-        var thisState = tasks.features;
-        // Mapped is done and Validated is validated
-        // https://tasks.hotosm.org/api-docs/swagger-ui/index.html?url=https://tasks.hotosm.org/api/docs#/
-        if(taskStatus === Mapped || taskStatus === Validated) {
+      var prjFc = jsonResponse.tasks;
+      var prjTasks = prjFc.features;
+      for(var i=0; i<prjTasks.length; i++){
+        var tile = prjTasks[i];
+        var tileState = tile.properties.taskStatus;
+        if(tileState === "MAPPED" || tileState === "VALIDATED") {
           var tileProp = {
-            "task": thisTask["properties.taskId"],
-            "state": taskStatus
+            "project": jsonResponse.projectId,
+            "task": tile.properties.taskId,
+            "state": tileState
           };
-          tasksFc.features.push(turf.feature(geometry, tileProp));
+          summaryFc.features.push(turf.feature(tile.geometry, tileProp));
         }
 
       }
@@ -123,7 +126,7 @@ var parseTasks = flow.define(
   },
   function(){
     var filePath = path.join(__dirname,"output", "output_" + timestamp + ".geojson");
-    fs.writeFile(filePath, JSON.stringify(tasksFc));
+    fs.writeFile(filePath, JSON.stringify(summaryFc));
   }
 );
 
