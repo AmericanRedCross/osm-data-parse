@@ -3,7 +3,7 @@ var path = require('path');
 var flow = require('flow');
 var request = require('request');
 var converter = require('json-2-csv');
-var turf = require('turf');
+var turf = require('@turf/helpers');
 var moment = require("moment");
 
 
