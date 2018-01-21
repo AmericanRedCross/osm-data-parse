@@ -11,7 +11,7 @@
     "url": "git://github.com/AmericanRedCross/osm-data-parse.git"
   },
   "author": "danbjoseph",
-  "license": "ISC",
+  "license": "BSD-3-Clause",
   "dependencies": {
     "flow": "^0.2.3",
     "json-2-csv": "^2.0.22",
