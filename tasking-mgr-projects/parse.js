@@ -68,19 +68,18 @@ var fetchProjectData = function(projectNumber, cb) {
   });
 }
 
-var throttleTasks = function(cb){
+var throttleProjects = function(cb){
   var targetCount = 0;
   var counter = 0;
-  targetCount = missingmaps.length;
   for (var i=0;i<targetCount;i++) {
      (function(ind) {
          setTimeout(function(){
            // # # # throttle process to limit the speed of calls to download files from the server
-           fetchTaskData(ind, function(){
+           fetchProjectData(ind, function(){
              counter ++;
              if(counter === targetCount){ cb(); }
-           });
-         }, 500 + (100 * ind));
+           })
+         }, 1 + (10 * ind));
      })(i);
   }
 }
