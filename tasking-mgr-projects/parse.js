@@ -18,7 +18,7 @@ var questions = [
     type: 'input',
     name: 'searchTerm',
     message: 'Match projects based on what text string? (Project titles will have spaces removed and be lowercased.)',
-    default: 'missingmaps'
+    default: ''
   },
   {
     type: 'input',
@@ -59,33 +59,33 @@ var questions = [
 function fetchPrjData(projectNumber) {
   return new Promise((resolve, reject) => {
     request({ method: 'GET',
-      uri: "http://tasks.hotosm.org/api/v1/project/" + projectNumber + "/summary"
+      uri: "https://tasking-manager-tm4-production-api.hotosm.org/api/v2/projects/" + projectNumber + "/queries/summary"
     },(error, res, body) => {
       if (!error && res.statusCode == 200){
         var jsonResponse = JSON.parse(body);
         if (jsonResponse) {
-            var nameCheck = jsonResponse.name.replace(/\s+/g, '').toLowerCase().indexOf(searchTerm);
+            var nameCheck = jsonResponse.projectInfo.name.replace(/\s+/g, '').toLowerCase().indexOf(searchTerm);
             if (nameCheck !== -1) {
               var projectObj = {
-                "task_number": projectNumber,
+                "projectId": projectNumber,
                 "created" : jsonResponse["created"].slice(0,10),
-                "name": jsonResponse["name"].replace(/"/g,""),
-                "author": jsonResponse["organisationTag"],
+                "name": jsonResponse.projectInfo["name"].replace(/"/g,""),
+                "organisationName": jsonResponse["organisationName"],
                 "status":jsonResponse["status"],
-                "done": jsonResponse["percentMapped"],
-                "validated": jsonResponse["percentValidated"]
+                "percentMapped": jsonResponse["percentMapped"],
+                "percentValidated": jsonResponse["percentValidated"]
               }
               console.log("match for task :  " + projectNumber);
               matchCollection.push(projectObj);
               resolve(projectObj)
-          } else { 
-            console.log("no match for   :  " + projectNumber); 
+          } else {
+            console.log("no match for   :  " + projectNumber);
             resolve();
           }
         }
       } else {
         console.log("failed fetchProjectData for :  " + projectNumber)
-        console.log(JSON.stringify(res) + '\n' )   
+        console.log(JSON.stringify(res) + '\n' )
         resolve();
       }
     });
@@ -96,7 +96,7 @@ var fetchTaskData = function(projectNumber) {
   return new Promise((resolve,reject) => {
     request({
       method: 'GET',
-      uri: "https://tasks.hotosm.org/api/v1/project/" + projectNumber
+      uri: "https://tasking-manager-tm4-production-api.hotosm.org/api/v2/projects/" + projectNumber
     },(error, res, body) => {
       if (!error && res.statusCode == 200) {
         var jsonResponse = JSON.parse(body);
@@ -122,7 +122,7 @@ var fetchTaskData = function(projectNumber) {
         resolve();
       }
     });
-  })  
+  })
 }
 
 function parseTasks() {
