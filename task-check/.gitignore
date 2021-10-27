@@ -1,0 +1,6 @@
+node_modules
+.DS_Store
+output/*
+!output/output.txt
+files/*
+!files/projects.csv.example

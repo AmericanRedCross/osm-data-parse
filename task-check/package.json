@@ -1,0 +1,22 @@
+{
+  "name": "task-check",
+  "version": "0.0.0",
+  "description": "",
+  "main": "parse.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/AmericanRedCross/osm-data-parse.git"
+  },
+  "author": "danbjoseph",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "@turf/turf": "^6.5.0",
+    "async": "^3.2.1",
+    "needle": "^3.0.0",
+    "papaparse": "^5.3.1",
+    "path": "^0.12.7"
+  }
+}
